@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Writer's Forge | The Infinite Screenwriter</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800;900&family=Courier+Prime&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        body, html {
+            margin: 0; padding: 0; width: 100%; font-family: 'Inter', sans-serif;
+            background-color: #0d0d0d; color: #f0f0f0; overflow-x: hidden; scroll-behavior: smooth;
+        }
+
+        #hero-canvas {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; opacity: 0.15;
+        }
+
+        .content-wrapper { position: relative; z-index: 1; width: 100%; }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .btn-forge {
+            display: inline-flex; align-items: center; justify-content: center;
+            padding: 1rem 3rem; border-radius: 0.5rem; font-weight: 800;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            text-transform: uppercase; letter-spacing: 0.15em; font-size: 0.75rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%); color: white;
+            box-shadow: 0 10px 30px -5px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 25px 45px -10px rgba(99, 102, 241, 0.5); }
+
+        .card {
+            background-color: rgba(22, 22, 22, 0.95); border: 1px solid #222;
+            border-radius: 1rem; backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover { border-color: #6366f1; transform: translateY(-4px); }
+
+        .comparison-table { width: 100%; border-collapse: separate; border-spacing: 0 0.5rem; }
+        .comparison-table th { padding: 1.5rem; text-align: center; color: #4b5563; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.2em; }
+        .comparison-table td { padding: 1.25rem; background: rgba(255,255,255,0.02); border-top: 1px solid rgba(255,255,255,0.05); text-align: center; position: relative; }
+        .comparison-table tr td:first-child { border-top-left-radius: 0.5rem; border-bottom-left-radius: 0.5rem; text-align: left; font-weight: 700; color: #fff; cursor: help; }
+        .comparison-table tr td:last-child { border-top-right-radius: 0.5rem; border-bottom-right-radius: 0.5rem; border: 1px solid rgba(99, 102, 241, 0.2); }
+
+        .tooltip { visibility: hidden; width: 280px; background-color: #111; color: #9ca3af; text-align: center; border-radius: 8px; padding: 14px; position: absolute; z-index: 100; bottom: 130%; left: 0; opacity: 0; transition: all 0.3s; font-size: 0.75rem; font-weight: normal; line-height: 1.4; box-shadow: 0 10px 30px rgba(0,0,0,0.8); pointer-events: none; border: 1px solid #333; }
+        tr td:first-child:hover .tooltip { visibility: visible; opacity: 1; transform: translateY(-5px); }
+
+        .check-green { color: #22c55e; }
+        .cross-red { color: #ef4444; }
+        
+        .founder-badge-pill {
+            background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%); color: white;
+            padding: 5px 15px; border-radius: 9999px; font-size: 0.7rem; font-weight: 900;
+            box-shadow: 0 0 15px rgba(251, 191, 36, 0.2); text-transform: uppercase; letter-spacing: 0.1em;
+        }
+
+        .pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem; width: 100%; max-width: 950px; margin: 0 auto; }
+        
+        .jmd-price { font-size: 0.85rem; color: #9ca3af; font-weight: 800; margin-top: 4px; letter-spacing: 0.05em; }
+        
+        .exclusive-feature { color: #fbbf24; font-weight: 800; }
+        .extension-chip { background: rgba(99, 102, 241, 0.1); border: 1px solid #312e81; color: #818cf8; padding: 4px 10px; border-radius: 4px; font-size: 10px; font-weight: 800; text-transform: uppercase; }
+        .exclusive-chip { background: rgba(251, 191, 36, 0.1); border: 1px solid #78350f; color: #fbbf24; }
+    </style>
+</head>
+<body>
+
+    <canvas id="hero-canvas"></canvas>
+
+    <div class="content-wrapper">
+        <!-- Navigation -->
+        <header class="fixed top-0 left-0 w-full bg-black/60 backdrop-blur-xl z-50 border-b border-white/5">
+            <nav class="container mx-auto max-w-6xl px-6 py-5 flex justify-between items-center">
+                <a href="#" class="text-xl font-black tracking-tighter flex items-center gap-4">
+                    <div class="w-9 h-9 bg-indigo-600 rounded-lg flex items-center justify-center text-white shadow-xl">
+                        <i class="fas fa-hammer"></i>
+                    </div>
+                    <span>WRITER'S FORGE</span>
+                </a>
+                <div class="hidden md:flex items-center space-x-10 text-[10px] font-black tracking-widest text-gray-500">
+                    <a href="#mission" class="hover:text-white transition uppercase">MISSION</a>
+                    <a href="#exclusivity" class="hover:text-white transition uppercase">FOUNDER PERKS</a>
+                    <a href="#compare" class="hover:text-white transition uppercase">VERDICT</a>
+                </div>
+                <a href="#pricing" class="btn-forge btn-primary py-2 px-6 text-[10px]">COMMISSION THE FORGE</a>
+            </nav>
+        </header>
+
+        <!-- Hero Section -->
+        <section class="min-h-screen flex flex-col items-center justify-center px-6 pt-24 text-center">
+            <div class="max-w-4xl">
+                <div class="mb-8 flex justify-center">
+                    <span class="founder-badge-pill">FOUNDER EDITION EARLY ACCESS</span>
+                </div>
+                <h1 class="text-5xl md:text-9xl font-black text-white leading-tight mb-8 tracking-tighter uppercase">
+                    Forge. Write. <br>
+                    <span class="gradient-text">Own.</span>
+                </h1>
+                <p class="text-lg md:text-2xl text-gray-400 max-w-2xl mx-auto mb-16 leading-relaxed font-medium">
+                    Writer's Forge is currently in Commercial Early Access. Your purchase funds the development that allows us to release this as a free, open-source tool for the community in <strong class="text-white">July 2026.</strong>
+                </p>
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-8">
+                    <a href="#pricing" class="btn-forge btn-primary">COMMISSION EARLY ACCESS</a>
+                    <a href="#mission" class="text-xs font-black text-gray-500 hover:text-white transition uppercase tracking-[0.3em]">The Philosophy &rarr;</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Mission Section -->
+        <section id="mission" class="py-40 px-6">
+            <div class="container mx-auto max-w-4xl text-center">
+                <h2 class="text-4xl font-black text-white mb-10 tracking-tight uppercase">A Call to Commission</h2>
+                <div class="space-y-10 text-gray-400 leading-relaxed text-lg">
+                    <p>
+                        Buy Writer's Forge today to secure early access, shape the roadmap, and fund the future of open-source creative tools. <strong class="text-white">You aren't just buying software; you're commissioning it.</strong>
+                    </p>
+                    <p class="text-base text-gray-500">
+                        We are dismantling the model of digital dispossession. While free tiers on platforms like <strong class="text-white">Writer Duet</strong> limit you to a single script and lock away professional features, the Forge provides an unrestricted, infinite canvas. Our mission is to ensure high-performance tools remain accessible and owned by the creators themselves.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Founder Perks / Exclusivity -->
+        <section id="exclusivity" class="py-32 px-6 bg-black/30">
+            <div class="container mx-auto max-w-6xl text-center">
+                <h2 class="text-3xl font-black text-white mb-16 uppercase tracking-widest">FOUNDER EXCLUSIVES</h2>
+                
+                <div class="grid md:grid-cols-2 gap-10">
+                    <div class="card p-10 flex flex-col items-center border-amber-500/30">
+                        <div class="w-14 h-14 bg-amber-500/10 rounded-full flex items-center justify-center text-amber-500 mb-6">
+                            <i class="fas fa-stethoscope text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-black text-white mb-4">THE DIALOGUE DOCTOR</h3>
+                        <p class="text-gray-400 text-sm leading-relaxed mb-6">
+                            Exclusive to the Founder build. This advanced extension performs a structural diagnostic of your characters. It identifies <strong class="text-white">Monologue Detection</strong> for lengthy, over-extended speeches and <strong class="text-white">Interrogative Patterns</strong> for characters with a high question-density in their dialogue. It serves as an objective auditor to ensure your voices remain distinct and structurally balanced.
+                        </p>
+                        <span class="text-[10px] font-black text-amber-500 uppercase tracking-widest">FOUNDER EXCLUSIVE EXTENSION</span>
+                    </div>
+
+                    <div class="card p-10 flex flex-col items-center border-indigo-500/30">
+                        <div class="w-14 h-14 bg-indigo-500/10 rounded-full flex items-center justify-center text-indigo-400 mb-6">
+                            <i class="fas fa-medal text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-black text-white mb-4">FOUNDER STATUS BADGE</h3>
+                        <p class="text-gray-400 text-sm leading-relaxed mb-6 italic">
+                            An Honorary Feat of Patronage. This badge is a permanent, hard-coded testament to your role in commissioning this tool. Because of your commission, Writer's Forge can eventually be released as a gift to the world. As a Founder, you possess a version with unique status markers and exclusivity that no future users will ever possess.
+                        </p>
+                        <span class="text-[10px] font-black text-indigo-400 uppercase tracking-widest">A MARK OF HONOR</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Extensions Explained -->
+        <section class="py-32 px-6">
+            <div class="container mx-auto max-w-4xl text-center">
+                <h2 class="text-2xl font-black text-white mb-6 uppercase tracking-tight">Modular Power: Extensions Explained</h2>
+                <p class="text-gray-400 text-base leading-relaxed mb-10">
+                    Extensions are <strong class="text-white">Modular Power-ups.</strong> For regular writers, Writer's Forge is a professional, distraction-free workspace. For power users, it is an evolving engine. Using custom JavaScript extensions, you can add new themes, sidebar tools, or specialized character analytics without ever needing to update the core application. 
+                </p>
+                <div class="flex flex-wrap justify-center gap-4">
+                    <span class="extension-chip">DARK MODE PRO</span>
+                    <span class="extension-chip">REVISION TRACKER</span>
+                    <span class="extension-chip">TYPEWRITER SCROLL</span>
+                    <span class="extension-chip exclusive-chip">DIALOGUE DOCTOR</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pricing Tiers -->
+        <section id="pricing" class="py-40 px-6 bg-black/40">
+            <div class="container mx-auto max-w-6xl text-center">
+                <h2 class="text-4xl font-black text-white mb-20 tracking-tight uppercase">Commission Options</h2>
+                
+                <div class="pricing-grid">
+                    <!-- Founder Edition -->
+                    <div class="card p-10 border-gray-800 flex flex-col items-center">
+                        <h3 class="text-xl font-black text-white mb-2 uppercase">FOUNDER EDITION</h3>
+                        <div class="text-3xl font-black gradient-text">$44.19 USD</div>
+                        <div class="jmd-price">$7,070.40 JMD</div>
+                        <ul class="my-8 space-y-4 text-[10px] font-black text-gray-400 uppercase tracking-widest text-left w-full">
+                            <li class="flex items-center gap-2"><i class="fas fa-check text-indigo-500"></i> UNRESTRICTED WRITER'S FORGE ACCESS</li>
+                            <li class="flex items-center gap-2"><i class="fas fa-check text-indigo-500"></i> PERMANENT LIFETIME UPDATES</li>
+                            <li class="flex items-center gap-2"><i class="fas fa-check text-indigo-500"></i> ROADMAP INPUT & FEEDBACK</li>
+                            <li class="flex items-center gap-2 text-white"><i class="fas fa-award text-amber-500"></i> HONORARY STATUS BADGE</li>
+                            <li class="flex items-center gap-2 exclusive-feature"><i class="fas fa-star"></i> DIALOGUE DOCTOR EXTENSION</li>
+                        </ul>
+                        <a href="https://www.paypal.com/paypalme/teamfras/44.19USD" target="_blank" class="btn-forge btn-primary w-full mt-auto">COMMISSION</a>
+                    </div>
+
+                    <!-- Elite Founder -->
+                    <div class="card p-10 border-indigo-600 ring-2 ring-indigo-600/20 flex flex-col items-center">
+                        <h3 class="text-xl font-black text-white mb-2 uppercase">FOUNDER ELITE</h3>
+                        <div class="text-3xl font-black gradient-text">$50.00+ USD</div>
+                        <div class="jmd-price">$8,000.00+ JMD</div>
+                        <ul class="my-8 space-y-4 text-[10px] font-black text-gray-400 uppercase tracking-widest text-left w-full">
+                            <li class="flex items-center gap-2"><i class="fas fa-check text-indigo-500"></i> ALL FOUNDER EDITION PERKS</li>
+                            <li class="flex items-center gap-2 exclusive-feature"><i class="fas fa-crown"></i> 1 CUSTOM EXTENSION REQUEST</li>
+                            <li class="flex items-center gap-2 text-white"><i class="fas fa-plus"></i> ROADMAP INPUT ACCESS</li>
+                        </ul>
+                        <p class="text-[9px] text-gray-500 mb-6 italic leading-relaxed">Shape your specific workflow. Elite Founders who donate $50 USD or more can request one custom modular extension tailored exclusively to their workflow.</p>
+                        <a href="https://www.paypal.com/paypalme/teamfras/50USD" target="_blank" class="btn-forge btn-primary w-full mt-auto">JOIN ELITE</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Comparison Section -->
+        <section id="compare" class="py-40 px-6">
+            <div class="container mx-auto max-w-5xl">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl font-black text-white mb-4 uppercase tracking-tighter">The Comparison</h2>
+                    <p class="text-gray-500 text-[10px] font-black tracking-[0.4em]">Writer's Forge vs. Proprietary Slabs</p>
+                </div>
+                
+                <div class="overflow-x-auto">
+                    <table class="comparison-table">
+                        <thead>
+                            <tr>
+                                <th class="text-left">CAPABILITY</th>
+                                <th>WRITER DUET</th>
+                                <th>FINAL DRAFT</th>
+                                <th class="text-indigo-400">WRITER'S FORGE</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    Permanent Ownership
+                                    <span class="tooltip">You own the application file itself. It never expires and works entirely offline. No license servers to check in with.</span>
+                                </td>
+                                <td class="cross-red"><i class="fas fa-times"></i></td>
+                                <td class="check-green"><i class="fas fa-check"></i></td>
+                                <td class="check-green"><i class="fas fa-check"></i></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Unlimited Scripts (Free/Early)
+                                    <span class="tooltip">No limits on the number of projects you can create. Competitive free versions often lock you to a single script.</span>
+                                </td>
+                                <td class="text-gray-600 text-[10px]">1 SCRIPT LIMIT</td>
+                                <td class="check-green"><i class="fas fa-check"></i></td>
+                                <td class="check-green font-black">UNRESTRICTED</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Dialogue Doctor (Audit)
+                                    <span class="tooltip">Advanced character voice analytics and rhythmic auditing for monologues and interrogatives. Exclusive to the Founder Edition.</span>
+                                </td>
+                                <td class="cross-red"><i class="fas fa-times"></i></td>
+                                <td class="cross-red"><i class="fas fa-times"></i></td>
+                                <td class="check-green font-black">EXCLUSIVE</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Modular Extensions (.js)
+                                    <span class="tooltip">"Power-ups" that allow writers to add new themes or sidebar tools instantly without updating the core app.</span>
+                                </td>
+                                <td class="cross-red"><i class="fas fa-times"></i></td>
+                                <td class="cross-red"><i class="fas fa-times"></i></td>
+                                <td class="check-green font-black">UNLIMITED</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Mathematical Privacy
+                                    <span class="tooltip">Zero cloud syncing by design. Your creative data stays on your local hardware and never touches a server.</span>
+                                </td>
+                                <td class="cross-red"><i class="fas fa-times"></i></td>
+                                <td class="check-green"><i class="fas fa-check"></i></td>
+                                <td class="check-green"><i class="fas fa-check"></i></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Local Multi-Doc Search
+                                    <span class="tooltip">Search across all your scripts simultaneously without your files ever leaving your local machine.</span>
+                                </td>
+                                <td class="cross-red"><i class="fas fa-times"></i></td>
+                                <td class="text-gray-600 text-[10px]">BASIC</td>
+                                <td class="check-green"><i class="fas fa-check"></i></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Typewriter Scroll (Core)
+                                    <span class="tooltip">Keeps your active line centered on the screen, mimicking the vertical focus of a traditional typewriter.</span>
+                                </td>
+                                <td class="text-gray-600 text-[10px]">LOCKED</td>
+                                <td class="check-green"><i class="fas fa-check"></i></td>
+                                <td class="check-green"><i class="fas fa-check"></i></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Focus Dimmer (Core)
+                                    <span class="tooltip">Intelligently dims the interface and inactive text to highlight the scene you are currently drafting.</span>
+                                </td>
+                                <td class="cross-red"><i class="fas fa-times"></i></td>
+                                <td class="text-gray-600 text-[10px]">LOCKED</td>
+                                <td class="check-green"><i class="fas fa-check"></i></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="py-20 border-t border-white/5">
+            <div class="container mx-auto px-6 text-center">
+                <p class="text-gray-500 text-[11px] uppercase tracking-[0.4em] mb-4">Forge & Cleon Williams &copy; 2026</p>
+                <p class="text-gray-600 text-[9px] font-bold uppercase">Created by Cleon Williams. Built to empower, not to entrap.</p>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // Background Particles
+        const canvas = document.getElementById('hero-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; init(); }
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 1.5 + 0.5;
+                this.speedX = Math.random() * 0.3 - 0.15;
+                this.speedY = Math.random() * 0.3 - 0.15;
+            }
+            update() {
+                this.x += this.speedX; this.y += this.speedY;
+                if (this.x > canvas.width) this.x = 0; if (this.x < 0) this.x = canvas.width;
+                if (this.y > canvas.height) this.y = 0; if (this.y < 0) this.y = canvas.height;
+            }
+            draw() {
+                ctx.fillStyle = 'rgba(99, 102, 241, 0.2)';
+                ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fill();
+            }
+        }
+        function init() { particles = []; for (let i = 0; i < 80; i++) particles.push(new Particle()); }
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => { p.update(); p.draw(); });
+            requestAnimationFrame(animate);
+        }
+        window.addEventListener('resize', resize); resize(); animate();
+    </script>
+</body>
+</html>
