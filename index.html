@@ -51,11 +51,12 @@
 
         .card:hover { border-color: #6366f1; transform: translateY(-4px); }
 
-        .comparison-table { width: 100%; border-collapse: separate; border-spacing: 0 0.5rem; }
-        .comparison-table th { padding: 1.5rem; text-align: center; color: #4b5563; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.2em; }
-        .comparison-table td { padding: 1.25rem; background: rgba(255,255,255,0.02); border-top: 1px solid rgba(255,255,255,0.05); text-align: center; position: relative; }
-        .comparison-table tr td:first-child { border-top-left-radius: 0.5rem; border-bottom-left-radius: 0.5rem; text-align: left; font-weight: 700; color: #fff; cursor: help; }
-        .comparison-table tr td:last-child { border-top-right-radius: 0.5rem; border-bottom-right-radius: 0.5rem; border: 1px solid rgba(99, 102, 241, 0.2); }
+        /* Unified Table System */
+        .forge-table { width: 100%; border-collapse: separate; border-spacing: 0 0.5rem; }
+        .forge-table th { padding: 1.5rem; text-align: center; color: #4b5563; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.2em; }
+        .forge-table td { padding: 1.25rem; background: rgba(255,255,255,0.02); border-top: 1px solid rgba(255,255,255,0.05); text-align: center; position: relative; }
+        .forge-table tr td:first-child { border-top-left-radius: 0.5rem; border-bottom-left-radius: 0.5rem; text-align: left; font-weight: 700; color: #fff; cursor: help; }
+        .forge-table tr td:last-child { border-top-right-radius: 0.5rem; border-bottom-right-radius: 0.5rem; border: 1px solid rgba(99, 102, 241, 0.2); }
 
         .tooltip { visibility: hidden; width: 280px; background-color: #111; color: #9ca3af; text-align: center; border-radius: 8px; padding: 14px; position: absolute; z-index: 100; bottom: 130%; left: 0; opacity: 0; transition: all 0.3s; font-size: 0.75rem; font-weight: normal; line-height: 1.4; box-shadow: 0 10px 30px rgba(0,0,0,0.8); pointer-events: none; border: 1px solid #333; }
         tr td:first-child:hover .tooltip { visibility: visible; opacity: 1; transform: translateY(-5px); }
@@ -174,6 +175,65 @@
             </div>
         </section>
 
+        <!-- The Founder's Bill of Rights (BENEFITS TABLE) -->
+        <section id="benefits" class="py-20 px-6 bg-black">
+            <div class="container mx-auto max-w-5xl">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl font-black text-white mb-2 uppercase tracking-tight">THE FOUNDER'S BILL OF RIGHTS</h2>
+                    <p class="text-indigo-400 text-[10px] font-black tracking-[0.3em]">YOU ARE NOT BUYING A LICENSE. YOU ARE ACQUIRING AN ASSET.</p>
+                </div>
+                
+                <div class="overflow-x-auto">
+                    <table class="forge-table">
+                        <thead>
+                            <tr>
+                                <th class="text-left">THE RIGHT</th>
+                                <th>COMMISSIONER BENEFIT</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    Digital Sovereignty
+                                    <span class="tooltip">You own the code as a local asset. No external servers control your access.</span>
+                                </td>
+                                <td class="text-gray-400 text-left text-sm leading-relaxed">
+                                    Writer's Forge is server-less. Once downloaded, it is yours. No company can "deactivate" your account or revoke your access. You possess the tool itself, not a permission to use it.
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Direct Governance
+                                    <span class="tooltip">Commissioners have a seat at the roadmap table to prioritize screenwriter needs.</span>
+                                </td>
+                                <td class="text-gray-400 text-left text-sm leading-relaxed">
+                                    Commissioners don't just use the tool; they build it. You have a direct voice in feature prioritization, ensuring the Forge benefits creative performance over corporate metrics.
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    One-Time Finality
+                                    <span class="tooltip">Permanent updates included. No recurring costs, forever.</span>
+                                </td>
+                                <td class="text-gray-400 text-left text-sm leading-relaxed">
+                                    Eliminate the subscription parasite. Your one-time commission grants you lifetime updates and all future core features without another cent ever leaving your wallet.
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    The Founder's Arsenal
+                                    <span class="tooltip">Access to specialized extensions that remain exclusive to this build.</span>
+                                </td>
+                                <td class="text-gray-400 text-left text-sm leading-relaxed">
+                                    Gain immediate access to the <strong class="text-indigo-400">Dialogue Doctor</strong> and other high-level analytics extensions that will remain exclusive to the Founder build.
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
         <!-- Comparison Section -->
         <section id="compare" class="py-20 px-6">
             <div class="container mx-auto max-w-5xl">
@@ -183,7 +243,7 @@
                 </div>
                 
                 <div class="overflow-x-auto">
-                    <table class="comparison-table">
+                    <table class="forge-table">
                         <thead>
                             <tr>
                                 <th class="text-left">CAPABILITY</th>
