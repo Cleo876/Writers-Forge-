@@ -23,11 +23,12 @@
 
         .content-wrapper { position: relative; z-index: 1; width: 100%; }
         
-        /* Atmospheric Background (No Blur Bleed) */
+        /* Atmospheric Background */
         .hero-banner {
             position: relative;
             overflow: hidden;
             background: radial-gradient(circle at 50% 50%, #1e1b4b 0%, #0d0d0d 100%);
+            padding-bottom: 5rem;
         }
 
         .hero-banner::before {
@@ -37,36 +38,44 @@
             background-image: url('https://github.com/Cleo876/Writers-Forge-/blob/main/Banner.png?raw=true');
             background-size: cover;
             background-position: center;
-            filter: opacity(0.2) grayscale(1); /* Subdued texture */
+            filter: opacity(0.15) grayscale(1); 
             z-index: 0;
         }
 
         .hero-content { position: relative; z-index: 10; }
 
-        /* Browser Mockup Styling */
+        /* Professional Browser Mockup with Tilt Logic */
+        .app-mockup-wrapper {
+            perspective: 1500px;
+            margin: 5rem auto 0 auto;
+            max-width: 1100px;
+            width: 95%;
+            z-index: 20;
+        }
+
         .app-mockup {
             position: relative;
-            max-width: 900px;
-            margin: 4rem auto 0 auto;
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 14px;
             background: #111;
-            box-shadow: 0 50px 100px -20px rgba(0,0,0,0.7), 0 0 40px rgba(99, 102, 241, 0.2);
+            box-shadow: 0 50px 100px -20px rgba(0,0,0,0.8), 0 0 60px rgba(99, 102, 241, 0.25);
             overflow: hidden;
-            transform: perspective(1000px) rotateX(2deg);
+            transform-style: preserve-3d;
+            transition: transform 0.1s ease-out;
+            will-change: transform;
         }
 
         .mockup-header {
-            height: 32px;
+            height: 38px;
             background: #1a1a1a;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
+            border-bottom: 1px solid rgba(255,255,255,0.08);
             display: flex;
             align-items: center;
-            padding: 0 12px;
-            gap: 6px;
+            padding: 0 16px;
+            gap: 8px;
         }
 
-        .dot { width: 8px; height: 8px; border-radius: 50%; background: #333; }
+        .dot { width: 10px; height: 10px; border-radius: 50%; }
         .dot.red { background: #ff5f56; }
         .dot.yellow { background: #ffbd2e; }
         .dot.green { background: #27c93f; }
@@ -121,6 +130,8 @@
         }
 
         .pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem; width: 100%; max-width: 950px; margin: 0 auto; }
+        .jmd-price { font-size: 0.85rem; color: #9ca3af; font-weight: 800; margin-top: 4px; letter-spacing: 0.05em; }
+        .exclusive-feature { color: #fbbf24; font-weight: 800; }
     </style>
 </head>
 <body>
@@ -139,15 +150,15 @@
                 <div class="hidden md:flex items-center space-x-10 text-[10px] font-black tracking-widest text-gray-500">
                     <a href="#mission" class="hover:text-white transition uppercase">MISSION</a>
                     <a href="#pricing" class="hover:text-white transition uppercase">COMMISSION</a>
-                    <a href="#exclusivity" class="hover:text-white transition uppercase">FOUNDER PERKS</a>
+                    <a href="#benefits" class="hover:text-white transition uppercase">YOUR RIGHTS</a>
                 </div>
                 <a href="#pricing" class="btn-forge btn-primary py-2 px-6 text-[10px]">COMMISSION THE FORGE</a>
             </nav>
         </header>
 
-        <!-- Hero Section with Floating App Mockup -->
-        <section class="min-h-screen flex flex-col items-center justify-center px-6 pt-32 text-center hero-banner">
-            <div class="max-w-4xl hero-content">
+        <!-- Hero Section -->
+        <section class="min-h-screen flex flex-col items-center justify-center px-6 pt-32 text-center hero-banner" id="hero-interaction-zone">
+            <div class="max-w-5xl hero-content">
                 <div class="mb-8 flex justify-center">
                     <span class="founder-badge-pill">FOUNDER EDITION EARLY ACCESS</span>
                 </div>
@@ -156,37 +167,39 @@
                     <span class="gradient-text">Own.</span>
                 </h1>
                 <p class="text-lg md:text-2xl text-gray-200 max-w-2xl mx-auto mb-10 leading-relaxed font-medium text-lift">
-                    Securing the future of open-source creative tools. <br> Full Release <strong class="text-white">July 2026.</strong>
+                    Writer's Forge is currently in Commercial Early Access. Your purchase funds the development that allows us to release this as a free, open-source tool for the community in <strong class="text-white">July 2026.</strong>
                 </p>
                 
-                <div class="flex flex-col sm:flex-row items-center justify-center gap-8 mb-12">
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-8 mb-4">
                     <a href="#pricing" class="btn-forge btn-primary">COMMISSION EARLY ACCESS</a>
                     <a href="#mission" class="text-xs font-black text-gray-400 hover:text-white transition uppercase tracking-[0.3em]">The Philosophy &rarr;</a>
                 </div>
 
-                <!-- NEW: Product Showcase Mockup -->
-                <div class="app-mockup">
-                    <div class="mockup-header">
-                        <div class="dot red"></div>
-                        <div class="dot yellow"></div>
-                        <div class="dot green"></div>
-                        <div class="flex-1 text-[9px] text-gray-600 font-bold uppercase tracking-widest">Writer's Forge - Editor Build 1.4.5</div>
+                <!-- Product Showcase Mockup -->
+                <div class="app-mockup-wrapper">
+                    <div class="app-mockup" id="main-mockup">
+                        <div class="mockup-header">
+                            <div class="dot red"></div>
+                            <div class="dot yellow"></div>
+                            <div class="dot green"></div>
+                            <div class="flex-1 text-[9px] text-gray-600 font-bold uppercase tracking-widest">Writer's Forge - Editor Build 1.4.5</div>
+                        </div>
+                        <img src="https://github.com/Cleo876/Writers-Forge-/blob/main/Banner.png?raw=true" alt="Writer's Forge Interface" class="mockup-img">
                     </div>
-                    <img src="https://github.com/Cleo876/Writers-Forge-/blob/main/Banner.png?raw=true" alt="Writer's Forge Interface" class="mockup-img">
                 </div>
             </div>
         </section>
 
         <!-- Mission Section -->
-        <section id="mission" class="py-24 px-6">
+        <section id="mission" class="py-32 px-6">
             <div class="container mx-auto max-w-4xl text-center">
                 <h2 class="text-4xl font-black text-white mb-10 tracking-tight uppercase">A Call to Commission</h2>
                 <div class="space-y-10 text-gray-400 leading-relaxed text-lg">
                     <p>
-                        Buy Writer's Forge today to secure early access and fund the future of open-source creative tools. <strong class="text-white">You aren't just buying software; you're commissioning it.</strong>
+                        Buy Writer's Forge today to secure early access, shape the roadmap, and fund the future of open-source creative tools. <strong class="text-white">You aren't just buying software; you're commissioning it.</strong>
                     </p>
                     <p class="text-base text-gray-500">
-                        While free tiers on other platforms lock away professional features, the Forge provides an unrestricted, infinite canvas. Our mission is to ensure high-performance tools remain owned by the creators themselves.
+                        We are dismantling the model of digital dispossession. While free tiers on platforms like <strong class="text-white">Writer Duet</strong> limit you to a single script and lock away professional features, the Forge provides an unrestricted, infinite canvas. Our mission is to ensure high-performance tools remain accessible and owned by the creators themselves.
                     </p>
                 </div>
             </div>
@@ -202,9 +215,11 @@
                         <div class="text-3xl font-black gradient-text">$44.19 USD</div>
                         <div class="jmd-price">$7,070.40 JMD</div>
                         <ul class="my-8 space-y-4 text-[10px] font-black text-gray-400 uppercase tracking-widest text-left w-full">
-                            <li class="flex items-center gap-2"><i class="fas fa-check text-indigo-500"></i> UNRESTRICTED FORGE ACCESS</li>
+                            <li class="flex items-center gap-2"><i class="fas fa-check text-indigo-500"></i> UNRESTRICTED WRITER'S FORGE ACCESS</li>
                             <li class="flex items-center gap-2"><i class="fas fa-check text-indigo-500"></i> PERMANENT LIFETIME UPDATES</li>
+                            <li class="flex items-center gap-2"><i class="fas fa-check text-indigo-500"></i> ROADMAP INPUT & FEEDBACK</li>
                             <li class="flex items-center gap-2 text-white"><i class="fas fa-award text-amber-500"></i> HONORARY STATUS BADGE</li>
+                            <li class="flex items-center gap-2 exclusive-feature"><i class="fas fa-star"></i> DIALOGUE DOCTOR EXTENSION</li>
                         </ul>
                         <a href="https://www.paypal.com/paypalme/teamfras/44.19USD" target="_blank" class="btn-forge btn-primary w-full mt-auto">COMMISSION</a>
                     </div>
@@ -215,7 +230,9 @@
                         <ul class="my-8 space-y-4 text-[10px] font-black text-gray-400 uppercase tracking-widest text-left w-full">
                             <li class="flex items-center gap-2"><i class="fas fa-check text-indigo-500"></i> ALL FOUNDER EDITION PERKS</li>
                             <li class="flex items-center gap-2 exclusive-feature"><i class="fas fa-crown"></i> 1 CUSTOM EXTENSION REQUEST</li>
+                            <li class="flex items-center gap-2 text-white"><i class="fas fa-plus"></i> ROADMAP INPUT ACCESS</li>
                         </ul>
+                        <p class="text-[9px] text-gray-500 mb-6 italic leading-relaxed">Shape your specific workflow. Elite Founders who donate $50 USD or more can request one custom modular extension tailored exclusively to their workflow.</p>
                         <a href="https://www.paypal.com/paypalme/teamfras/50USD" target="_blank" class="btn-forge btn-primary w-full mt-auto">JOIN ELITE</a>
                     </div>
                 </div>
@@ -227,6 +244,7 @@
             <div class="container mx-auto max-w-5xl">
                 <div class="text-center mb-12">
                     <h2 class="text-3xl font-black text-white mb-2 uppercase tracking-tight">THE FOUNDER'S BILL OF RIGHTS</h2>
+                    <p class="text-indigo-400 text-[10px] font-black tracking-[0.3em]">YOU ARE NOT BUYING A LICENSE. YOU ARE ACQUIRING AN ASSET.</p>
                 </div>
                 <div class="overflow-x-auto">
                     <table class="forge-table">
@@ -236,11 +254,15 @@
                         <tbody>
                             <tr>
                                 <td class="font-bold text-white">Digital Sovereignty</td>
-                                <td class="text-gray-400 text-left text-sm leading-relaxed">No company can "deactivate" your access. You own the code as a local asset.</td>
+                                <td class="text-gray-400 text-left text-sm leading-relaxed">Writer's Forge is server-less. Once downloaded, it is yours. No company can "deactivate" your account or revoke your access. You possess the tool itself, not a permission to use it.</td>
+                            </tr>
+                            <tr>
+                                <td class="font-bold text-white">Direct Governance</td>
+                                <td class="text-gray-400 text-left text-sm leading-relaxed">Commissioners don't just use the tool; they build it. You have a direct voice in feature prioritization, ensuring the Forge benefits creative performance over corporate metrics.</td>
                             </tr>
                             <tr>
                                 <td class="font-bold text-white">One-Time Finality</td>
-                                <td class="text-gray-400 text-left text-sm leading-relaxed">Eliminate the subscription parasite. Your commission grants lifetime updates.</td>
+                                <td class="text-gray-400 text-left text-sm leading-relaxed">Eliminate the subscription parasite. Your one-time commission grants you lifetime updates and all future core features without another cent ever leaving your wallet.</td>
                             </tr>
                         </tbody>
                     </table>
@@ -252,11 +274,13 @@
         <footer class="py-16 border-t border-white/5">
             <div class="container mx-auto px-6 text-center">
                 <p class="text-gray-500 text-[11px] uppercase tracking-[0.4em] mb-4">Forge & Cleon Williams &copy; 2026</p>
+                <p class="text-gray-600 text-[9px] font-bold uppercase">Created by Cleon Williams. Built to empower, not to entrap.</p>
             </div>
         </footer>
     </div>
 
     <script>
+        // Background Particles
         const canvas = document.getElementById('hero-canvas');
         const ctx = canvas.getContext('2d');
         let particles = [];
@@ -285,6 +309,24 @@
             particles.forEach(p => { p.update(); p.draw(); });
             requestAnimationFrame(animate);
         }
+
+        // Mouse Tilt Interactive Engine
+        const mockup = document.getElementById('main-mockup');
+        const zone = document.getElementById('hero-interaction-zone');
+
+        zone.addEventListener('mousemove', (e) => {
+            const { width, height, left, top } = zone.getBoundingClientRect();
+            const x = (e.clientX - left) / width - 0.5;
+            const y = (e.clientY - top) / height - 0.5;
+            const rotateX = y * -10;
+            const rotateY = x * 10;
+            mockup.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
+        });
+
+        zone.addEventListener('mouseleave', () => {
+            mockup.style.transform = `rotateX(0deg) rotateY(0deg) scale(1)`;
+        });
+
         window.addEventListener('resize', resize); resize(); animate();
     </script>
 </body>
