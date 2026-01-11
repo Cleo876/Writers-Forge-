@@ -120,8 +120,14 @@
         .forge-table { width: 100%; border-collapse: separate; border-spacing: 0 0.5rem; }
         .forge-table th { padding: 1.5rem; text-align: center; color: #4b5563; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.2em; }
         .forge-table td { padding: 1.25rem; background: rgba(255,255,255,0.02); border-top: 1px solid rgba(255,255,255,0.05); text-align: center; position: relative; }
-        .forge-table tr td:first-child { border-top-left-radius: 0.5rem; border-bottom-left-radius: 0.5rem; text-align: left; font-weight: 700; color: #fff; }
+        .forge-table tr td:first-child { border-top-left-radius: 0.5rem; border-bottom-left-radius: 0.5rem; text-align: left; font-weight: 700; color: #fff; cursor: help; }
         .forge-table tr td:last-child { border-top-right-radius: 0.5rem; border-bottom-right-radius: 0.5rem; border: 1px solid rgba(99, 102, 241, 0.2); }
+
+        .tooltip { visibility: hidden; width: 280px; background-color: #111; color: #9ca3af; text-align: center; border-radius: 8px; padding: 14px; position: absolute; z-index: 100; bottom: 130%; left: 0; opacity: 0; transition: all 0.3s; font-size: 0.75rem; font-weight: normal; line-height: 1.4; box-shadow: 0 10px 30px rgba(0,0,0,0.8); pointer-events: none; border: 1px solid #333; }
+        tr td:first-child:hover .tooltip { visibility: visible; opacity: 1; transform: translateY(-5px); }
+
+        .check-green { color: #22c55e; }
+        .cross-red { color: #ef4444; }
 
         .founder-badge-pill {
             background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%); color: white;
@@ -131,7 +137,10 @@
 
         .pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem; width: 100%; max-width: 950px; margin: 0 auto; }
         .jmd-price { font-size: 0.85rem; color: #9ca3af; font-weight: 800; margin-top: 4px; letter-spacing: 0.05em; }
+        
         .exclusive-feature { color: #fbbf24; font-weight: 800; }
+        .extension-chip { background: rgba(99, 102, 241, 0.1); border: 1px solid #312e81; color: #818cf8; padding: 4px 10px; border-radius: 4px; font-size: 10px; font-weight: 800; text-transform: uppercase; }
+        .exclusive-chip { background: rgba(251, 191, 36, 0.1); border: 1px solid #78350f; color: #fbbf24; }
     </style>
 </head>
 <body>
@@ -270,6 +279,119 @@
             </div>
         </section>
 
+        <!-- Comparison Section -->
+        <section id="compare" class="py-20 px-6">
+            <div class="container mx-auto max-w-5xl">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl font-black text-white mb-4 uppercase tracking-tighter">The Comparison</h2>
+                    <p class="text-gray-500 text-[10px] font-black tracking-[0.4em]">Writer's Forge vs. Proprietary Slabs</p>
+                </div>
+                
+                <div class="overflow-x-auto">
+                    <table class="forge-table">
+                        <thead>
+                            <tr>
+                                <th class="text-left">CAPABILITY</th>
+                                <th>WRITER DUET</th>
+                                <th>FINAL DRAFT</th>
+                                <th class="text-indigo-400">WRITER'S FORGE</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    Permanent Ownership
+                                    <span class="tooltip">You own the application file itself. It never expires and works entirely offline. No license servers to check in with.</span>
+                                </td>
+                                <td class="cross-red"><i class="fas fa-times"></i></td>
+                                <td class="check-green"><i class="fas fa-check"></i></td>
+                                <td class="check-green"><i class="fas fa-check"></i></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Unlimited Scripts (Free/Early)
+                                    <span class="tooltip">No limits on the number of projects you can create. Competitive free versions often lock you to a single script.</span>
+                                </td>
+                                <td class="text-gray-600 text-[10px]">1 SCRIPT LIMIT</td>
+                                <td class="check-green"><i class="fas fa-check"></i></td>
+                                <td class="check-green font-black">UNRESTRICTED</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Dialogue Doctor (Audit)
+                                    <span class="tooltip">Advanced character voice analytics and rhythmic auditing for monologues and interrogatives. Exclusive to the Founder Edition.</span>
+                                </td>
+                                <td class="cross-red"><i class="fas fa-times"></i></td>
+                                <td class="cross-red"><i class="fas fa-times"></i></td>
+                                <td class="check-green font-black">EXCLUSIVE</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Modular Extensions (.js)
+                                    <span class="tooltip">"Power-ups" that allow writers to add new themes or sidebar tools instantly without updating the core app.</span>
+                                </td>
+                                <td class="cross-red"><i class="fas fa-times"></i></td>
+                                <td class="cross-red"><i class="fas fa-times"></i></td>
+                                <td class="check-green font-black">UNLIMITED</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Mathematical Privacy
+                                    <span class="tooltip">Zero cloud syncing by design. Your creative data stays on your local hardware and never touches a server.</span>
+                                </td>
+                                <td class="cross-red"><i class="fas fa-times"></i></td>
+                                <td class="check-green"><i class="fas fa-check"></i></td>
+                                <td class="check-green"><i class="fas fa-check"></i></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Local Multi-Doc Search
+                                    <span class="tooltip">Search across all your scripts simultaneously without your files ever leaving your local machine.</span>
+                                </td>
+                                <td class="cross-red"><i class="fas fa-times"></i></td>
+                                <td class="text-gray-600 text-[10px]">BASIC</td>
+                                <td class="check-green"><i class="fas fa-check"></i></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Typewriter Scroll (Core)
+                                    <span class="tooltip">Keeps your active line centered on the screen, mimicking the vertical focus of a traditional typewriter.</span>
+                                </td>
+                                <td class="text-gray-600 text-[10px]">LOCKED</td>
+                                <td class="check-green"><i class="fas fa-check"></i></td>
+                                <td class="check-green"><i class="fas fa-check"></i></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Focus Dimmer (Core)
+                                    <span class="tooltip">Intelligently dims the interface and inactive text to highlight the scene you are currently drafting.</span>
+                                </td>
+                                <td class="cross-red"><i class="fas fa-times"></i></td>
+                                <td class="text-gray-600 text-[10px]">LOCKED</td>
+                                <td class="check-green"><i class="fas fa-check"></i></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Extensions Explained (Restored) -->
+        <section class="py-20 px-6">
+            <div class="container mx-auto max-w-4xl text-center">
+                <h2 class="text-2xl font-black text-white mb-6 uppercase tracking-tight">Modular Power: Extensions Explained</h2>
+                <p class="text-gray-400 text-base leading-relaxed mb-10">
+                    Extensions are <strong class="text-white">Modular Power-ups.</strong> For regular writers, Writer's Forge is a professional, distraction-free workspace. For power users, it is an evolving engine. Using custom JavaScript extensions, you can add new themes, sidebar tools, or specialized character analytics without ever needing to update the core application. 
+                </p>
+                <div class="flex flex-wrap justify-center gap-4">
+                    <span class="extension-chip">DARK MODE PRO</span>
+                    <span class="extension-chip">REVISION TRACKER</span>
+                    <span class="extension-chip">TYPEWRITER SCROLL</span>
+                    <span class="extension-chip exclusive-chip">DIALOGUE DOCTOR</span>
+                </div>
+            </div>
+        </section>
+
         <!-- Footer -->
         <footer class="py-16 border-t border-white/5">
             <div class="container mx-auto px-6 text-center">
@@ -326,7 +448,7 @@
         zone.addEventListener('mouseleave', () => {
             mockup.style.transform = `rotateX(0deg) rotateY(0deg) scale(1)`;
         });
-        //resizes the window
+
         window.addEventListener('resize', resize); resize(); animate();
     </script>
 </body>
