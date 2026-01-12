@@ -1,127 +1,184 @@
-# Writer's Forge Extension Developer Manual
+# Writer's Forge Extension Developer Manual (v1.5.5)
 
-Welcome to the **Writer's Forge Extension System**. This guide provides the standards and best practices for creating `.js` extensions that enhance the capabilities of the editor.
+**Welcome to the Forge.**
 
-Extensions in Writer's Forge are lightweight JavaScript modules injected at runtime. They allow you to manipulate the DOM, interact with the application state, modify CSS, or add entirely new features.
+This guide is the definitive manual for building extensions for **Writer's Forge v1.5.5**. Whether you are a seasoned developer or writing your first script, this document will teach you how to inject custom tools, analytics, and UI elements directly into the editor.
 
-## 1. The Core Mechanism
+## 1. How Extensions Work
 
-Writer's Forge exposes a global `forge` object. Your extension script communicates with the application by calling `forge.register()`.
+Writer's Forge is a lightweight, single-file application. Extensions are JavaScript modules injected at runtime.
 
-When a user loads your `.js` file, the system executes it immediately. Your script **must** call `register` with a configuration object to be recognized and saved to the user's database.
+When you load an extension, the Forge does two things:
+1.  **Registers it:** Saves your code to the user's browser database (IndexedDB).
+2.  **Executes it:** Runs your code immediately.
 
-### Basic Structure
+**Key Concept:** Your script communicates with the application through the global `forge` object.
 
-```javascript
-// my_awesome_extension.js
+---
 
-forge.register({
-    name: "My Awesome Tool",
-    version: "1.0.0",
-    developer: "Your Name", // Vital for attribution!
-    description: "Adds a cool feature to the editor.",
-    onEnable: function() {
-        console.log("Extension Enabled!");
-        // Your activation logic here
-    },
-    onDisable: function() {
-        console.log("Extension Disabled!");
-        // Your cleanup logic here
-    }
-});
-```
+## 2. The Blueprint: `forge.register()`
 
-## 2. Configuration Object Reference
+Every extension **must** start by calling `forge.register()`. This function takes a "Configuration Object" that tells the Forge what your tool is and what it does.
 
-The configuration object passed to `forge.register` supports the following properties:
+### The Configuration Object
 
 | Property | Type | Required | Description |
 | :--- | :--- | :--- | :--- |
-| **`name`** | String | Yes | The display name of your extension in the manager. |
-| **`version`** | String | Yes | Semantic versioning string (e.g., "1.0.5"). |
-| **`developer`** | String | **Yes** | **Your Name or Brand.** Displayed in the UI to credit you. |
+| **`name`** | String | **Yes** | The title of your tool (e.g., "Pacing Tracker"). |
+| **`version`** | String | **Yes** | The version number (e.g., "1.0.0"). |
+| **`developer`** | String | **Yes** | **Your Name.** This gives you credit in the UI. |
 | **`description`** | String | No | A short summary of what the tool does. |
-| **`onEnable`** | Function | Yes | Executed when the user loads the extension or toggles it ON. |
-| **`onDisable`** | Function | Yes | Executed when the user toggles the extension OFF. |
-| **`id`** | String | No | Optional unique identifier. If omitted, the system generates one. |
+| **`onEnable`** | Function | **Yes** | **The Start Button.** Runs when the extension is turned ON. |
+| **`onDisable`** | Function | **Yes** | **The Kill Switch.** Runs when the extension is turned OFF. |
 
-### The `developer` Tag
-**Crucial:** Always include the `developer` field. This ensures that whether a user purchased your tool or downloaded it for free, your contribution is visibly recognized in the Extensions Manager.
+### Basic Skeleton Code
 
-## 3. Creating Your First Extension
-
-Here is a complete example of a functional extension. This script adds a "Word Goal" tracker to the top of the editor.
+Copy this code to start a new extension:
 
 ```javascript
 forge.register({
-    name: "Daily Word Goal",
-    version: "1.1.0",
-    developer: "Cleon",
-    description: "Displays a simple progress bar for a 500-word daily goal.",
+    name: "My First Extension",
+    version: "1.0.0",
+    developer: "Mr. Williams",
+    description: "Logs a message to the console.",
 
     onEnable: function() {
-        // 1. Create the UI element
-        const goalBar = document.createElement('div');
-        goalBar.id = 'ext-word-goal';
-        goalBar.style.position = 'fixed';
-        goalBar.style.top = '60px'; // Below navbar
-        goalBar.style.right = '20px';
-        goalBar.style.background = 'white';
-        goalBar.style.padding = '10px';
-        goalBar.style.border = '1px solid #ccc';
-        goalBar.style.borderRadius = '8px';
-        goalBar.style.zIndex = '1000';
-        goalBar.style.boxShadow = '0 4px 6px rgba(0,0,0,0.1)';
-        goalBar.innerHTML = `
-            <div style="font-size:12px; font-weight:bold; color:#555;">DAILY GOAL</div>
-            <div style="width:100px; height:6px; background:#eee; margin-top:5px; border-radius:3px;">
-                <div id="ext-goal-fill" style="width:0%; height:100%; background:#4f46e5; border-radius:3px; transition:width 0.3s;"></div>
-            </div>
-            <div id="ext-goal-text" style="font-size:10px; color:#888; margin-top:3px;">0 / 500</div>
-        `;
-        document.body.appendChild(goalBar);
-
-        // 2. Define the logic
-        this.updateGoal = () => {
-            const text = document.body.innerText || "";
-            const words = text.split(/\s+/).length;
-            const percentage = Math.min(100, (words / 500) * 100);
-            
-            const fill = document.getElementById('ext-goal-fill');
-            const label = document.getElementById('ext-goal-text');
-            
-            if(fill) fill.style.width = percentage + '%';
-            if(label) label.innerText = `${words} / 500`;
-        };
-
-        // 3. Attach listeners
-        document.addEventListener('input', this.updateGoal);
-        
-        // Initial run
-        this.updateGoal();
+        console.log("System Online.");
+        // Your logic goes here
     },
 
     onDisable: function() {
-        // CLEANUP IS CRITICAL
-        const el = document.getElementById('ext-word-goal');
-        if(el) el.remove();
-        
-        // Remove listeners to prevent memory leaks
-        document.removeEventListener('input', this.updateGoal);
+        console.log("System Offline.");
+        // Cleanup logic goes here
     }
 });
 ```
 
-## 4. Best Practices
+---
 
-1.  **Clean Up:** Your `onDisable` function must remove *everything* your extension added. If you added event listeners, styles, or DOM elements, remove them.
-2.  **Scoping:** Avoid declaring global variables (`var x = 10`). Keep logic inside your `onEnable` function or attached to the extension object (`this.myFunc = ...`).
-3.  **Selectors:** When targeting editor elements, use the class `.script-element` or the ID `#editor-container`. Be aware that Writer's Forge uses Tailwind CSS, so standard utility classes are available for your use.
-4.  **Error Handling:** Wrap risky code in `try...catch` blocks so your extension doesn't crash the main application.
+## 3. Accessing the Engine (Advanced)
 
-## 5. Distributing Your Extension
+This is the most important section for making powerful tools. **Writer's Forge v1.5.5** exposes its internal state globally. You can access the script data directly.
 
-Simply save your code as a `.js` file (e.g., `word_goal.js`). Users can load it directly via the **Extensions Manager > Load Custom Extension** button in Writer's Forge.
+### A. `window.store` (The Database)
+This is the source of truth. It contains the screenplay data.
 
-Happy Coding!
+* **`window.store.blocks`**: An array of objects representing every line in the script.
+    * *Example:* `{ id: "uuid...", type: "type-scene", content: "INT. HOUSE - DAY" }`
+* **`window.store.characters`**: An array of all character names detected.
+* **`window.store.scenes`**: An array of all scene headings.
+
+### B. `window.editor` (The Interface)
+This controls the visual editor.
+
+* **`window.editor.render()`**: Forces the editor to redraw the script. Call this if you modify data.
+* **`window.editor.calculateStats()`**: Triggers the Pulse Engine to recount words and timing.
+
+### C. The DOM (The Visuals)
+Writer's Forge uses specific HTML classes you can target:
+
+* **`#editor-container`**: The main scrollable area containing the pages.
+* **`.script-element`**: The class applied to every line of text.
+* **Block Types:**
+    * `.type-scene` (Scene Headings)
+    * `.type-action` (Action lines)
+    * `.type-character` (Character Names)
+    * `.type-dialogue` (Dialogue)
+    * `.type-parenthetical` (Wrylies)
+    * `.type-transition` (Transitions)
+
+---
+
+## 4. Tutorial: Building a "Focus Mode" Button
+
+Let's build an extension that adds a floating button to toggle a "High Contrast" mode.
+
+### Step 1: The Setup
+Create a new file named `focus_button.js`. Add the registration block.
+
+### Step 2: The Logic (`onEnable`)
+We need to create a button, style it, and add it to the screen.
+
+```javascript
+onEnable: function() {
+    // 1. Create the button
+    const btn = document.createElement('button');
+    btn.innerText = "FOCUS";
+    btn.id = "my-focus-btn"; // Give it an ID so we can find it later!
     
+    // 2. Style it (using CSS strings or standard JS styles)
+    btn.style.position = "fixed";
+    btn.style.bottom = "20px";
+    btn.style.right = "20px";
+    btn.style.zIndex = "1000";
+    btn.style.padding = "10px 20px";
+    btn.style.background = "red";
+    btn.style.color = "white";
+    btn.style.borderRadius = "5px";
+    btn.style.border = "none";
+    btn.style.cursor = "pointer";
+    
+    // 3. Add functionality
+    btn.onclick = function() {
+        alert("Focus Mode Clicked! (You could inject CSS here)");
+    };
+
+    // 4. Inject into the page
+    document.body.appendChild(btn);
+}
+```
+
+### Step 3: The Cleanup (`onDisable`)
+**Crucial:** If you do not remove the button in `onDisable`, it will stay on the screen even after the user disables your extension.
+
+```javascript
+onDisable: function() {
+    const btn = document.getElementById("my-focus-btn");
+    if (btn) {
+        btn.remove(); // Delete the element
+    }
+}
+```
+
+---
+
+## 5. Style & Dark Mode
+
+Writer's Forge v1.5.5 has a robust **Dark Mode**. If you create UI elements (like panels or bars), you should respect the user's theme.
+
+**The `dark-mode` Class:**
+The `<body>` tag will have the class `dark-mode` if the user has enabled it.
+
+**Example Check:**
+```javascript
+function applyTheme(myElement) {
+    if (document.body.classList.contains('dark-mode')) {
+        myElement.style.background = "#1f2937"; // Dark gray
+        myElement.style.color = "#f3f4f6";      // Light text
+    } else {
+        myElement.style.background = "#ffffff"; // White
+        myElement.style.color = "#1f2937";      // Dark text
+    }
+}
+```
+
+---
+
+## 6. Best Practices (Do's and Don'ts)
+
+* **DO** use unique IDs for your elements (e.g., `ext-my-tool-panel`) so you can easily find and remove them.
+* **DO** use `try...catch` blocks. If your code crashes, you don't want to crash the whole editor.
+* **DON'T** rely on global variables (`var x = 10`). Keep variables inside your `onEnable` function or attach them to `this` (e.g., `this.myCounter = 0`).
+* **DON'T** edit the `window.store.blocks` array directly unless you are sure to call `window.editor.render()` immediately after.
+
+---
+
+## 7. How to Install
+
+1.  Save your code as a `.js` file.
+2.  Open **Writer's Forge**.
+3.  Click the **Extensions Icon** (Puzzle Piece) in the toolbar.
+4.  Click **+ Load Custom Extension**.
+5.  Select your file.
+
+Happy Coding.
